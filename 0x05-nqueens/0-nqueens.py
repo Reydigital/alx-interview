@@ -1,117 +1,145 @@
 #!/usr/bin/python3
 
+""" N QUEENS ALGORITHM WITH BACKTRACKING (RECURSION INSIDE LOOP) """
+
 import sys
 
-"""nqueens backtracking algorithm"""
 
 
 
 
+class NQueen:
 
-if __name__ == "__main__":
+        """ Class for solving N Queen Problem """
 
-        if len(sys.argv) != 2:
 
-                    print("Usage: nqueens N")
 
-                            exit(1)
+            def __init__(self, n):
 
-                                if sys.argv[1].isdigit() is False:
+                        """ Global Variables """
 
-                                            print("N must be a number")
+                                self.n = n
 
-                                                    exit(1)
+                                        self.x = [0 for i in range(n + 1)]
 
-                                                        n = int(sys.argv[1])
+                                                self.res = []
 
-                                                            if n < 4:
 
-                                                                        print("N must be at least 4")
 
-                                                                                exit(1)
+                                                    def place(self, k, i):
 
+                                                                """ Checks if k Queen can be placed in i column (True)
 
+                                                                        or if the are attacking queens in row or diagonal (False)
 
-                                                                                    # initialize the answer list (of coordinates)
+                                                                                """
 
-                                                                                        board = []
 
-                                                                                            for i in range(n):
 
-                                                                                                        board.append([i, None])
+                                                                                        # j checks from 1 to k - 1 (Up to previous queen)
 
+                                                                                                for j in range(1, k):
 
+                                                                                                                # There is already a queen in column
 
-                                                                                                            def is_safe(x, y):
+                                                                                                                            # or a queen in same diagonal
 
-                                                                                                                        """determines if position (x, y) is safe"""
+                                                                                                                                        if self.x[j] == i or \
 
+                                                                                                                                                               abs(self.x[j] - i) == abs(j - k):
 
+                                                                                                                                                                                   return 0
 
-                                                                                                                                # Check current row
+                                                                                                                                                                                       return 1
 
-                                                                                                                                        for z in range(n):
 
-                                                                                                                                                        if y == board[z][1]:
 
-                                                                                                                                                                            return False
+                                                                                                                                                                                       def nQueen(self, k):
 
+                                                                                                                                                                                                   """ Tries to place every queen in the board
 
+                                                                                                                                                                                                           Args:
 
-                                                                                                                                                                                # Check diagonals
+                                                                                                                                                                                                                   k: starting queen from which to evaluate (should be 1)
 
-                                                                                                                                                                                        i = 0
+                                                                                                                                                                                                                           """
 
-                                                                                                                                                                                                while(i < x):
+                                                                                                                                                                                                                                   # i goes from column 1 to column n (1st column is 1st index)
 
-                                                                                                                                                                                                                if abs(board[i][1] - y) == abs(i - x):
+                                                                                                                                                                                                                                           for i in range(1, self.n + 1):
 
-                                                                                                                                                                                                                                    return False
+                                                                                                                                                                                                                                                           if self.place(k, i):
 
-                                                                                                                                                                                                                                            i += 1
+                                                                                                                                                                                                                                                                               # Queen can be placed in i column
 
-                                                                                                                                                                                                                                                    # Position is safe!
+                                                                                                                                                                                                                                                                                               self.x[k] = i
 
-                                                                                                                                                                                                                                                            return True
+                                                                                                                                                                                                                                                                                                               if k == self.n:
 
+                                                                                                                                                                                                                                                                                                                                       # Placed all 4 Queens (A solution was found)
 
+                                                                                                                                                                                                                                                                                                                                                           solution = []
 
-                                                                                                                                                                                                                                                            def solve(x):
+                                                                                                                                                                                                                                                                                                                                                                               for i in range(1, self.n + 1):
 
-                                                                                                                                                                                                                                                                        """solves and backtracks when encountering conflicts"""
+                                                                                                                                                                                                                                                                                                                                                                                                           solution.append([i - 1, self.x[i] - 1])
 
-                                                                                                                                                                                                                                                                                # loop through cols
+                                                                                                                                                                                                                                                                                                                                                                                                                               self.res.append(solution)
 
-                                                                                                                                                                                                                                                                                        for y in range(n):
+                                                                                                                                                                                                                                                                                                                                                                                                                                               else:
 
-                                                                                                                                                                                                                                                                                                        # clear column
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                       # Need to place more Queens
 
-                                                                                                                                                                                                                                                                                                                    for i in range(x, n):
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           self.nQueen(k + 1)
 
-                                                                                                                                                                                                                                                                                                                                        board[i][1] = None
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   return self.res
 
 
 
-                                                                                                                                                                                                                                                                                                                                                    # checks if pos is safe (current col y + x row)
 
-                                                                                                                                                                                                                                                                                                                                                                if is_safe(x, y):
 
-                                                                                                                                                                                                                                                                                                                                                                                    board[x][1] = y
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               # Main
 
-                                                                                                                                                                                                                                                                                                                                                                                                    # accept and print if we have the final # of queens
 
-                                                                                                                                                                                                                                                                                                                                                                                                                    if (x == n - 1):
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                            print(board)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               if len(sys.argv) != 2:
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            # move to next column if not
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       print("Usage: nqueens N")
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            else:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           sys.exit(1)
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    solve(x + 1)
 
 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           N = sys.argv[1]
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        # start the recursive process at x = 0
 
-            solve(0)                                                                                                                                                                    
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           try:
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   N = int(N)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           except ValueError:
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   print("N must be a number")
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       sys.exit(1)
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       if N < 4:
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               print("N must be at least 4")
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   sys.exit(1)
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   queen = NQueen(N)
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   res = queen.nQueen(1)
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   for i in res:
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           print(i)
